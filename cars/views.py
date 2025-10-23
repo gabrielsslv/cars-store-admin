@@ -1,6 +1,8 @@
 from cars.models import Car
 from cars.forms import CarModelForm
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
     
 class CarsListView(ListView):
@@ -14,7 +16,8 @@ class CarsListView(ListView):
         if search:
             cars = cars.filter(model__icontains=search)
         return cars
-    
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class NewCarCreateView(CreateView):
     model = Car
     form_class = CarModelForm
